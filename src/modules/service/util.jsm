@@ -308,7 +308,7 @@ rigantestools_Util.prototype.secToTimeStr = function(time) {
  *            date date to convert in seconds.
  * @return {string} date in format jj.mm.aaaa hh:mm.
  */
-rigantestools_Util.prototype.formatDateTime = function(date) {
+rigantestools_Util.prototype.formatDateTimeFull = function(date) {
     if (date === null) {
         return "";
     }
@@ -325,6 +325,37 @@ rigantestools_Util.prototype.formatDateTime = function(date) {
     var f = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
     return a + " " + b + "." + c + "." + d + " " + e + ":" + f;
 };
+
+
+/**
+ * convert seconds to datetime string jj.mm.aaaa hh:mm
+ * 
+ * @this {Util}
+ * @param {date}
+ *            date date to convert in seconds.
+ * @return {string} date in format jj.mm hh:mm.
+ */
+rigantestools_Util.prototype.formatDateTime = function(date) {
+    if (date === null) {
+        return "";
+    }
+
+    var day = date.getDay() - 1;
+    if (day < 0) {
+        day = 6;
+    }
+    var a = rigantestools_Util.prototype.getBundleString("smallDay." + day);
+    var b = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate();
+    var c = ((date.getMonth() + 1) < 10) ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
+    var e = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+    var f = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+    return a + " " + b + "." + c + "." + " " + e + ":" + f;
+};
+
+
+
+
+
 
 /**
  * convert seconds to time string day hh:mm
@@ -344,10 +375,54 @@ rigantestools_Util.prototype.formatDayTime = function(date) {
         day = 6;
     }
     var a = rigantestools_Util.prototype.getBundleString("smallDay." + day);
+    if( a.length==0 ) a = "?" ;
     var e = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
     var f = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
     return a + " " + e + ":" + f;
 };
+
+
+/**
+ * convert seconds to time string day hh:mm
+ * 
+ * @this {Util}
+ * @param {date}
+ *            date date to convert in seconds.
+ * @return {string} date in format day hh:mm except if today, in this case just hh:mm
+ */
+rigantestools_Util.prototype.formatDayTime2 = function(date) {
+    if (date === null) {
+        return "";
+    }
+
+    var day = date.getDay() - 1;
+    if (day < 0) {
+        day = 6;
+    }
+    
+    
+    var now = new Date();
+    var day2 = now.getDay() - 1;
+    if( day2 < 0 ) {
+    	day2 = 6 ;
+    }
+    
+    
+    var a = rigantestools_Util.prototype.getBundleString("smallDay." + day);
+    if( a.length==0 ) a = "?" ;
+    var e = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+    var f = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+    
+    
+    if( day===day2 ) {
+    	return e + ":" + f;
+    }
+    else {
+	    return a + " " + e + ":" + f;
+	}
+};
+
+
 
 rigantestools_Util.prototype.formatTime = function(date) {
     if (date === null) {
